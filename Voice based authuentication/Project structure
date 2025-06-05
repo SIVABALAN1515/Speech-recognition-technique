@@ -1,0 +1,7 @@
+voice-authentication/
+│
+├── voice_auth.py
+├── requirements.txt
+├── README.md
+├── .gitignore
+└── enrolled_voice.wav (after enrollment)
