@@ -1,0 +1,5 @@
+speech-search-engine/
+│
+├── README.md
+├── requirements.txt
+└── speech_search_engine.py
