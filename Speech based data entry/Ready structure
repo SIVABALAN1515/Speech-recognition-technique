@@ -1,0 +1,6 @@
+speech-data-entry/
+│
+├── README.md
+├── requirements.txt
+├── .gitignore
+└── speech_data_entry.py
