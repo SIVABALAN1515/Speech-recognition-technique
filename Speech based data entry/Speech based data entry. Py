@@ -1,0 +1,56 @@
+import csv
+import os
+import speech_recognition as sr
+import pyttsx3
+
+DATA_FILE = "data_entries.csv"
+
+def speak(text):
+    engine = pyttsx3.init()
+    engine.say(text)
+    engine.runAndWait()
+
+def listen():
+    recognizer = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("🎙️ Listening...")
+        recognizer.adjust_for_ambient_noise(source)
+        audio = recognizer.listen(source)
+
+    try:
+        print("🧠 Recognizing...")
+        text = recognizer.recognize_google(audio)
+        print(f"✅ You said: {text}")
+        return text
+    except sr.UnknownValueError:
+        print("❌ Could not understand audio.")
+        return None
+    except sr.RequestError:
+        print("❌ Recognition request failed.")
+        return None
+
+def save_to_csv(entry):
+    file_exists = os.path.isfile(DATA_FILE)
+    with open(DATA_FILE, mode='a', newline='', encoding='utf-8') as file:
+        writer = csv.writer(file)
+        if not file_exists:
+            writer.writerow(["Entry"])
+        writer.writerow([entry])
+    print("💾 Entry saved.")
+
+def main():
+    speak("Welcome to the speech-based data entry system.")
+    while True:
+        speak("Please speak your entry or say 'exit' to quit.")
+        entry = listen()
+        if entry:
+            if entry.lower() in ['exit', 'quit', 'stop']:
+                speak("Exiting. Goodbye.")
+                break
+            save_to_csv(entry)
+            speak("Entry saved.")
+        else:
+            speak("Sorry, I didn't catch that.")
+
+if __name__ == "__main__":
+    main()
