@@ -1,0 +1,43 @@
+import speech_recognition as sr
+import pyttsx3
+import webbrowser
+
+def speak(text):
+    engine = pyttsx3.init()
+    engine.say(text)
+    engine.runAndWait()
+
+def listen():
+    recognizer = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("🎙️ Listening... Please speak your search query.")
+        recognizer.adjust_for_ambient_noise(source)
+        audio = recognizer.listen(source)
+
+        try:
+            print("🧠 Recognizing...")
+            query = recognizer.recognize_google(audio)
+            print(f"✅ You said: {query}")
+            return query
+        except sr.UnknownValueError:
+            print("❌ Sorry, I could not understand the audio.")
+            return None
+        except sr.RequestError:
+            print("❌ Could not request results. Check your internet connection.")
+            return None
+
+def search_google(query):
+    if query:
+        speak(f"Searching Google for {query}")
+        url = f"https://www.google.com/search?q={query.replace(' ', '+')}"
+        webbrowser.open(url)
+    else:
+        speak("No valid query provided.")
+
+def main():
+    speak("Welcome to the speech-based search engine.")
+    query = listen()
+    search_google(query)
+
+if __name__ == "__main__":
+    main()
